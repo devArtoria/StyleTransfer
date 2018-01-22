@@ -37,4 +37,7 @@ L style은 Style의 Loss
 최종 목적 함수는 다음과 같다  
 ```Min[I output] L totoal = Min[I output]((Alpha * L content) + (Beta * L style))```  
 Alpha와 Beta는 각각의 로스에 가중치를 주는 변수로 이 가중치에 따라 출력이 스타일 중점인지, 콘텐츠 중심인지 결정된다.
+
 ## References
+[Style Transfer](https://blog.lunit.io/2017/04/27/style-transfer/)
+[Gram matrix](https://ko.wikipedia.org/wiki/그람_행렬)
