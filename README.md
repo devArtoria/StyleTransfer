@@ -2,6 +2,8 @@
 Tensorflow code for "A Neural Algorithm of Artistic Style" (arXiv 1506.06576) 
 
 ## 논문 정리 및 메모
+블로그정리
+http://artoria.us/17
 ### Optimize 방법
 Style Transfer 알고리즘  
 input은 은 두가지
