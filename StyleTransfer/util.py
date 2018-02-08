@@ -29,7 +29,7 @@ def save_image(image, filename):
         PIL.Image.fromarray(image).save(file, 'jpeg')
 
 
-def plot_image(content_style, content_image, mixed_image):
+def plot_image(content_image, style_image, mixed_image):
     fig, axes = plt.subplot(1, 3, figsize=(10, 10))
 
     fig.subplots_adjust(hspace=0.1, wspace=0.1)
@@ -39,11 +39,11 @@ def plot_image(content_style, content_image, mixed_image):
     ax.set_xlabel("Content")
 
     ax = axes.flat[1]
-    ax.imshow(content_image / 255.0, interpolation='sinc')
+    ax.imshow(mixed_image / 255.0, interpolation='sinc')
     ax.set_xlabel("Output")
 
     ax = axes.flat[2]
-    ax.imshow(content_image / 255.0, interpolation='sinc')
+    ax.imshow(style_image / 255.0, interpolation='sinc')
     ax.set_xlabel("Style")
 
     for ax in axes.flat:
