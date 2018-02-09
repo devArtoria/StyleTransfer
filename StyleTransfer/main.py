@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-from . import util, model, style_transfer
+import util, model, style_transfer
 import os
 
 import argparse
@@ -9,7 +9,7 @@ def parse_args():
     desc = "Tensorflow implementation of 'Image Style Transfer Using Convolutional Neural Networks"
     parser = argparse.ArgumentParser(description=desc)
 
-    parser.add_argument('--model_path', type=str, default='pre_trained_model', help='The directory where the pre-trained model was saved')
+    parser.add_argument('--model_path', type=str, default='.', help='The directory where the pre-trained model was saved')
     parser.add_argument('--content', type=str, default='images/tubingen.jpg', help='File path of content image (notation in the paper : p)', required = True)
     parser.add_argument('--style', type=str, default='images/starry-night.jpg', help='File path of style image (notation in the paper : a)', required = True)
     parser.add_argument('--output', type=str, default='result.jpg', help='File path of output image', required = True)
@@ -27,9 +27,10 @@ def parse_args():
     parser.add_argument('--initial_type', type=str, default='content', choices=['random','content','style'], help='The initial image for optimization (notation in the paper : x)')
     parser.add_argument('--max_size', type=int, default=512, help='The maximum width or height of input images')
     parser.add_argument('--content_loss_norm_type', type=int, default=3, choices=[1,2,3], help='Different types of normalization for content loss')
-    parser.add_argument('--num_iter', type=int, default=1000, help='The number of iterations to run')
+    parser.add_argument('--num_iter', type=int, default=2, help='The number of iterations to run')
 
     return check_args(parser.parse_args())
+
 
 def check_args(args):
     try:
@@ -140,9 +141,6 @@ def main():
                                       )
     # launch the graph in a session
     result_image = st.update()
-
-    # close session
-    sess.close()
 
     # remove batch dimension
     shape = result_image.shape

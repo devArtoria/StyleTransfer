@@ -6,18 +6,12 @@ MODEL_FILE = 'imagenet-vgg-verydeep-19.mat'
 
 def conv2d(inputs, weights, bias):
 
-    conv = tf.nn.conv2d(input=inputs,
-                        filter=tf.constant(weights),
-                        strides=1,
-                        padding='SAME')
+    conv = tf.nn.conv2d(inputs, tf.constant(weights), strides=(1, 1, 1, 1), padding='SAME')
 
     return tf.nn.bias_add(conv, bias)
 
 def pooling(inputs):
-    return tf.layers.max_pooling2d(inputs=inputs,
-                                   pool_size=2,
-                                   strides=2,
-                                   padding='SAME')
+    return tf.nn.max_pool(inputs, ksize=(1, 2, 2, 1), strides=(1, 2, 2, 1), padding='SAME')
 
 def pre_process(image, mean_pixel):
     return image - mean_pixel
@@ -47,10 +41,10 @@ class VGG19:
         self.mean_pixel = np.array([123.68, 116.779, 103.939])
         self.weights = data['layers'][0]
 
-    def pre_process(self, image):
+    def preprocess(self, image):
         return image - self.mean_pixel
 
-    def feed_foward(self, input_image, scope=None):
+    def feed_forward(self, input_image, scope=None):
         net = {}
         current = input_image
 

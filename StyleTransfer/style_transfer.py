@@ -11,8 +11,8 @@ class StyleTransfer:
         self.net = net
         self.sess = session
 
-        self.CONTENT_LAYERS = collections.OrderedDict(sorted(content_layer_ids.item()))
-        self.STYLE_LAYERS = collections.OrderedDict(sorted(style_layer_ids.item()))
+        self.CONTENT_LAYERS = collections.OrderedDict(sorted(content_layer_ids.items()))
+        self.STYLE_LAYERS = collections.OrderedDict(sorted(style_layer_ids.items()))
 
         self.p0 = np.float32(self.net.preprocess(content_image))
         self.a0 = np.float32(self.net.preprocess(style_image))
@@ -97,15 +97,16 @@ class StyleTransfer:
             print('iter : %4d, ' % _iter, 'L_total : %g, L_content : %g, L_style : %g' % (tl, cl, sl))
             _iter += 1
 
-        optimizer = tf.contrib.opt.ScipyOptimizerInterface(self.L_total, method='L-BFGS-B', options={'maxiter': self.num_iter})
+        optimizer = tf.contrib.opt.ScipyOptimizerInterface(self.L_total, method='L-BFGS-B', options={'maxiter': 3})
 
-        init_op = tf.global_variables_initializer()
-        self.sess.run(init_op)
+        with self.sess() as session:
+            init_op = tf.global_variables_initializer()
+            session.run(init_op)
 
-        optimizer.minimize(self.sess,feed_dict={self.a:self.a0, self.p:self.p0},
-                           fetches=[self.L_total, self.L_content, self.L_style], loss_callback=callback)
+            optimizer.minimize(session, feed_dict={self.a:self.a0, self.p:self.p0},
+                               fetches=[self.L_total, self.L_content, self.L_style], loss_callback=callback)
 
-        final_image = self.sess.run(self.x)
+            final_image = session.run(self.x)
 
         final_image = np.clip(self.net.undo_preprocess(final_image), 0.0, 255.0)
 
